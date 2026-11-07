@@ -74,6 +74,7 @@ enum Topic: String, CaseIterable, Identifiable {
     case comparison = "المقارنات"
     case functions = "الدوال والقيمة المطلقة"
     case logic = "المنطق"
+    case inequalities = "المتباينات والفترات"
 
     var id: String { rawValue }
 
@@ -89,6 +90,7 @@ enum Topic: String, CaseIterable, Identifiable {
         case .comparison: return "arrow.left.arrow.right"
         case .functions: return "function"
         case .logic: return "questionmark.bubble"
+        case .inequalities: return "arrow.left.and.right"
         }
     }
 }

@@ -20,6 +20,9 @@ enum FormulaData {
         // المرحلة 5: أنماط المذكرة (الدوال، المنطق، السرعة، النسب، السعة...)
         l += FormulaData.memoFunctionsLogic()
         l += FormulaData.memoApplied()
+        l += FormulaData.memoChapter1()
+        l += FormulaData.memoChapter2()
+        l += FormulaData.memoChapter3()
         return l
     }()
 
