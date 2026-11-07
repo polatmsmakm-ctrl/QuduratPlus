@@ -23,6 +23,7 @@ enum FormulaData {
         l += FormulaData.memoChapter1()
         l += FormulaData.memoChapter2()
         l += FormulaData.memoChapter3()
+        l += FormulaData.memoChapters4to9()
         return l
     }()
 
