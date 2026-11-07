@@ -78,7 +78,7 @@ extension FormulaData {
                         let p = pick([10, 20, 25, 50])
                         if Bool.random() {
                             let after = Double(price) * Double(100 + p) / 100 * Double(100 - p) / 100
-                            return .compare("سعر سلعة \(price) ريال، زاد \(p)% ثم نقص \(p)%.",
+                            return .compare("سعر سلعة \(price) دينار، زاد \(p)% ثم نقص \(p)%.",
                                             a: "السعر النهائي", b: m("\(price)"), result: .bGreater,
                                             steps: ["بعد الزيادة: " + m("\(price) × \(fmt(Double(100 + p) / 100)) = \(fmt(Double(price * (100 + p)) / 100))"),
                                                     "بعد النقص: " + m("\(fmt(Double(price * (100 + p)) / 100)) × \(fmt(Double(100 - p) / 100)) = \(fmt(after))"),
@@ -87,7 +87,7 @@ extension FormulaData {
                         let q = pick([10, 20])
                         let two = Double(price) * Double(100 + p) / 100 * Double(100 + q) / 100
                         let one = Double(price) * Double(100 + p + q) / 100
-                        return .compare("سعر سلعة \(price) ريال.",
+                        return .compare("سعر سلعة \(price) دينار.",
                                         a: "زيادتان متتاليتان " + m("\(p)%") + " ثم " + m("\(q)%"),
                                         b: "زيادة واحدة " + m("\(p + q)%"), result: CompareResult.of(two, one),
                                         steps: ["الأولى: " + m("\(price) × \(fmt(Double(100 + p) / 100)) × \(fmt(Double(100 + q) / 100)) = \(fmt(two))"),

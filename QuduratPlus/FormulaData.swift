@@ -17,6 +17,9 @@ enum FormulaData {
         l += FormulaData.counting()
         l += FormulaData.numbersPlus()
         l += FormulaData.comparisons()
+        // المرحلة 5: أنماط المذكرة (الدوال، المنطق، السرعة، النسب، السعة...)
+        l += FormulaData.memoFunctionsLogic()
+        l += FormulaData.memoApplied()
         return l
     }()
 
@@ -105,11 +108,11 @@ enum FormulaData {
                         } while (old * (100 + pc)) % 100 != 0
                         let nw = old * (100 + pc) / 100
                         return .int(
-                            "ارتفع سعر سلعة بنسبة \(pc)% فأصبح \(nw) ريال. كم كان سعرها قبل الزيادة؟",
+                            "ارتفع سعر سلعة بنسبة \(pc)% فأصبح \(nw) دينار. كم كان سعرها قبل الزيادة؟",
                             steps: ["السعر الجديد يساوي " + m("\(100 + pc)%") + " من القديم",
                                     "نقسم الجديد على هذه النسبة: " + m("\(nw) × 100 ÷ \(100 + pc) = \(old)"),
                                     "لا نطرح \(pc)% من السعر الجديد؛ النسبة محسوبة من القديم"],
-                            value: old, unit: " ريال")
+                            value: old, unit: " دينار")
                         .withTraps([Double(nw * (100 - pc)) / 100, Double(nw - pc), Double(old + pc)])
                     }
                     var old = 0, pc = 0
@@ -145,11 +148,11 @@ enum FormulaData {
                         let after1 = price * (100 - d1) / 100
                         let finalPrice = after1 * (100 - d2) / 100
                         return .int(
-                            "سلعة سعرها \(price) ريال، خُصم منها \(d1)% ثم خُصم \(d2)% من السعر الجديد. كم سعرها النهائي؟",
+                            "سلعة سعرها \(price) دينار، خُصم منها \(d1)% ثم خُصم \(d2)% من السعر الجديد. كم سعرها النهائي؟",
                             steps: ["بعد الخصم الأول: " + m("\(price) × \(100 - d1)% = \(after1)"),
                                     "بعد الخصم الثاني: " + m("\(after1) × \(100 - d2)% = \(finalPrice)"),
                                     "لا نجمع الخصمين (\(d1 + d2)%)؛ الثاني يُحسب من السعر بعد الأول"],
-                            value: finalPrice, unit: " ريال",
+                            value: finalPrice, unit: " دينار",
                             traps: [price * (100 - d1 - d2) / 100, after1, price - d1 - d2])
                     }
                     var price = 0, dc = 0
@@ -160,17 +163,17 @@ enum FormulaData {
                     let off = price * dc / 100
                     let after = price - off
                     return .int(
-                        "سعر سلعة \(price) ريال وعليها خصم \(dc)%. كم سعرها بعد الخصم؟",
+                        "سعر سلعة \(price) دينار وعليها خصم \(dc)%. كم سعرها بعد الخصم؟",
                         steps: ["مقدار الخصم: " + m("\(price) × \(dc) ÷ 100 = \(off)"),
                                 "السعر بعد الخصم: " + m("\(price) − \(off) = \(after)")],
-                        value: after, unit: " ريال", traps: [off, price - dc, price + off])
+                        value: after, unit: " دينار", traps: [off, price - dc, price + off])
                 }),
             Formula(
                 id: "proportion", topic: .ratios, title: "التناسب (الضرب التبادلي)",
                 expression: "أ ÷ ب = ج ÷ س  ⇒  س = (ب × ج) ÷ أ",
                 symbolic: true,
                 explanation: "في التناسب حاصل ضرب الطرفين يساوي حاصل ضرب الوسطين. اضرب بالتقاطع ثم اقسم. وفي المسائل اللفظية احسب قيمة الوحدة الواحدة أولاً.",
-                trap: "ترتيب الحدود: تأكد أن الكميات المتشابهة في نفس الجهة (ساعات مع ساعات، وريالات مع ريالات). والتفكير بالجمع بدل الضرب.",
+                trap: "ترتيب الحدود: تأكد أن الكميات المتشابهة في نفس الجهة (ساعات مع ساعات، ودنانير مع دنانير). والتفكير بالجمع بدل الضرب.",
                 gen: { d in
                     if d == .hard {
                         let n1 = pick([3, 4, 5, 6, 8])
@@ -180,10 +183,10 @@ enum FormulaData {
                         let total1 = n1 * unitPrice
                         let answer = n2 * unitPrice
                         return .int(
-                            "ثمن \(n1) كتب \(total1) ريالاً. كم ثمن \(n2) كتاباً من النوع نفسه؟",
+                            "ثمن \(n1) كتب \(total1) ديناراً. كم ثمن \(n2) كتاباً من النوع نفسه؟",
                             steps: ["ثمن الكتاب الواحد: " + m("\(total1) ÷ \(n1) = \(unitPrice)"),
                                     "ثمن \(n2) كتاباً: " + m("\(n2) × \(unitPrice) = \(answer)")],
-                            value: answer, unit: " ريال",
+                            value: answer, unit: " دينار",
                             traps: [total1 + (n2 - n1), total1 * n2, answer + unitPrice])
                     }
                     let a = d == .easy ? pick([2, 3, 4, 5]) : rnd(3...9)
@@ -246,11 +249,11 @@ enum FormulaData {
                         let share = parts[which] * k
                         let ratio = m(parts.map { String($0) }.joined(separator: " : "))
                         return .int(
-                            "وُزّع مبلغ \(total) ريال على ثلاثة أشخاص بنسبة \(ratio). كم نصيب \(names[which])؟",
+                            "وُزّع مبلغ \(total) دينار على ثلاثة أشخاص بنسبة \(ratio). كم نصيب \(names[which])؟",
                             steps: ["مجموع أجزاء النسبة: " + m(parts.map { String($0) }.joined(separator: " + ") + " = \(sumParts)"),
                                     "قيمة الجزء الواحد: " + m("\(total) ÷ \(sumParts) = \(k)"),
                                     "نصيب \(names[which]): " + m("\(parts[which]) × \(k) = \(share)")],
-                            value: share, unit: " ريال",
+                            value: share, unit: " دينار",
                             traps: [parts[(which + 1) % 3] * k, k, total / 3])
                     }
                     let pr = d == .easy ? pick([(1, 2), (1, 3), (2, 3)]) : pick([(2, 3), (3, 5), (2, 5), (3, 7), (4, 5)])
@@ -265,11 +268,11 @@ enum FormulaData {
                     let word = askBig ? "الأكبر" : "الأصغر"
                     let sumParts = pr.0 + pr.1
                     return .int(
-                        "قُسّم مبلغ \(total) ريال بين شخصين بنسبة \(m("\(pr.0) : \(pr.1)")). ما نصيب صاحب النصيب \(word)؟",
+                        "قُسّم مبلغ \(total) دينار بين شخصين بنسبة \(m("\(pr.0) : \(pr.1)")). ما نصيب صاحب النصيب \(word)؟",
                         steps: ["مجموع أجزاء النسبة: " + m("\(pr.0) + \(pr.1) = \(sumParts)"),
                                 "قيمة الجزء الواحد: " + m("\(total) ÷ \(sumParts) = \(k)"),
                                 "النصيب = عدد أجزائه × قيمة الجزء: " + m("\(mult) × \(k) = \(part)")],
-                        value: part, unit: " ريال")
+                        value: part, unit: " دينار")
                     .withTraps([Double(other * k), Double(k), Double(total) / Double(mult)])
                 })
         ]

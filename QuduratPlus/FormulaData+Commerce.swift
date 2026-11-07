@@ -79,10 +79,10 @@ extension FormulaData {
                         let profit = cost * p / 100
                         let sale = cost + profit
                         return .int(
-                            "اشترى تاجر سلعة بـ \(cost) ريال وباعها بربح \(p)%. بكم باعها؟",
+                            "اشترى تاجر سلعة بـ \(cost) دينار وباعها بربح \(p)%. بكم باعها؟",
                             steps: ["مقدار الربح: " + m("\(cost) × \(p)% = \(profit)"),
                                     "سعر البيع: " + m("\(cost) + \(profit) = \(sale)")],
-                            value: sale, unit: " ريال", traps: [cost + p, profit, cost - profit])
+                            value: sale, unit: " دينار", traps: [cost + p, profit, cost - profit])
                     case .medium:
                         var cost = 0, pc = 0
                         repeat {
@@ -94,7 +94,7 @@ extension FormulaData {
                         let sale = gain ? cost + diff : cost - diff
                         let word = gain ? "الربح" : "الخسارة"
                         return .int(
-                            "اشترى شخص جهازاً بـ \(cost) ريال وباعه بـ \(sale) ريال. ما نسبة \(word)؟",
+                            "اشترى \(nm()) جهازاً بـ \(cost) دينار وباعه بـ \(sale) دينار. ما نسبة \(word)؟",
                             steps: ["مقدار \(word): " + m("|\(sale) − \(cost)| = \(diff)"),
                                     "النسبة من التكلفة: " + m("\(diff) ÷ \(cost) × 100 = \(pc)%")],
                             value: pc, unit: "%")
@@ -109,10 +109,10 @@ extension FormulaData {
                         let sale = gain ? cost * (100 + p) / 100 : cost * (100 - p) / 100
                         let rate = gain ? 100 + p : 100 - p
                         return .int(
-                            "باع تاجر سلعة بـ \(sale) ريال " + (gain ? "فربح" : "فخسر") + " \(p)% من التكلفة. كم كانت تكلفتها؟",
+                            "باع تاجر سلعة بـ \(sale) دينار " + (gain ? "فربح" : "فخسر") + " \(p)% من التكلفة. كم كانت تكلفتها؟",
                             steps: ["سعر البيع يساوي " + m("\(rate)%") + " من التكلفة",
                                     "التكلفة: " + m("\(sale) × 100 ÷ \(rate) = \(cost)")],
-                            value: cost, unit: " ريال")
+                            value: cost, unit: " دينار")
                         .withTraps([Double(sale) * Double(gain ? 100 - p : 100 + p) / 100, Double(gain ? sale - p : sale + p), Double(sale)])
                     }
                 }),
@@ -129,19 +129,19 @@ extension FormulaData {
                     switch d {
                     case .easy:
                         return .int(
-                            "أودع شخص \(principal) ريال بفائدة بسيطة \(r)% سنوياً. كم الفائدة بعد \(t) سنوات؟",
+                            "أودع \(nm()) \(principal) دينار بفائدة بسيطة \(r)% سنوياً. كم الفائدة بعد \(t) سنوات؟",
                             steps: ["الفائدة السنوية: " + m("\(principal) × \(r)% = \(principal * r / 100)"),
                                     "لعدد السنوات: " + m("\(principal * r / 100) × \(t) = \(interest)")],
-                            value: interest, unit: " ريال", traps: [principal * r / 100, principal + interest, interest * 10])
+                            value: interest, unit: " دينار", traps: [principal * r / 100, principal + interest, interest * 10])
                     case .medium:
                         return .int(
-                            "أودع شخص \(principal) ريال بفائدة بسيطة \(r)% سنوياً. كم يصبح المبلغ كله بعد \(t) سنوات؟",
+                            "أودع \(nm()) \(principal) دينار بفائدة بسيطة \(r)% سنوياً. كم يصبح المبلغ كله بعد \(t) سنوات؟",
                             steps: ["الفائدة: " + m("\(principal) × \(r)% × \(t) = \(interest)"),
                                     "المبلغ الكلي: " + m("\(principal) + \(interest) = \(principal + interest)")],
-                            value: principal + interest, unit: " ريال", traps: [interest, principal + principal * r / 100, principal + interest * 2])
+                            value: principal + interest, unit: " دينار", traps: [interest, principal + principal * r / 100, principal + interest * 2])
                     case .hard:
                         return .int(
-                            "أودع شخص \(principal) ريال بفائدة بسيطة، فحصل على فائدة \(interest) ريال بعد \(t) سنوات. ما النسبة السنوية؟",
+                            "أودع \(nm()) \(principal) دينار بفائدة بسيطة، فحصل على فائدة \(interest) دينار بعد \(t) سنوات. ما النسبة السنوية؟",
                             steps: ["الفائدة السنوية: " + m("\(interest) ÷ \(t) = \(interest / t)"),
                                     "النسبة: " + m("\(interest / t) ÷ \(principal) × 100 = \(r)%")],
                             value: r, unit: "%", traps: [r * t, interest * 100 / principal, r + 1])

@@ -72,6 +72,8 @@ enum Topic: String, CaseIterable, Identifiable {
     case sequences = "المتتابعات"
     case numbers = "الأعداد"
     case comparison = "المقارنات"
+    case functions = "الدوال والقيمة المطلقة"
+    case logic = "المنطق"
 
     var id: String { rawValue }
 
@@ -85,6 +87,8 @@ enum Topic: String, CaseIterable, Identifiable {
         case .sequences: return "number"
         case .numbers: return "divide"
         case .comparison: return "arrow.left.arrow.right"
+        case .functions: return "function"
+        case .logic: return "questionmark.bubble"
         }
     }
 }

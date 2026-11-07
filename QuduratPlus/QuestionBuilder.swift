@@ -11,8 +11,38 @@ struct ChoiceQuestion {
 /// يبني خيارات ذكية من الأخطاء الشائعة لكل مثال.
 enum QuestionBuilder {
 
+    /// نص الخيار الأخير المعتاد في اختبارات القدرات.
+    static let noneText = "ليس أيا مما سبق"
+
+    /// نسبة الأسئلة التي يظهر فيها خيار «ليس أيا مما سبق» (كما في مذكرة الاختبار).
+    static let noneRate = 0.22
+
     /// أربعة خيارات تشمل الإجابة الصحيحة، أو nil إذا تعذّر بناء خيارات كافية.
+    /// أحياناً يُستبدل الخيار الأخير بـ «ليس أيا مما سبق»: إما كمشتّت، أو كإجابة صحيحة
+    /// (وعندها تكون القيمة المحسوبة غير موجودة بين الخيارات الثلاثة الأخرى).
     static func choices(for example: Example) -> ChoiceQuestion? {
+        guard let base = baseChoices(for: example) else { return nil }
+        if example.fixedOptions != nil { return base }
+        if Double.random(in: 0..<1) >= noneRate { return base }
+
+        var options = base.options
+        var correct = base.correctIndex
+        if Bool.random() {
+            options.remove(at: correct)
+            options.append(noneText)
+            correct = options.count - 1
+        } else {
+            let wrongIndexes = options.indices.filter { $0 != correct }
+            guard let drop = wrongIndexes.randomElement() else { return base }
+            options.remove(at: drop)
+            if drop < correct { correct -= 1 }
+            options.append(noneText)
+        }
+        return ChoiceQuestion(options: options, correctIndex: correct)
+    }
+
+    /// الخيارات الأساسية قبل إضافة «ليس أيا مما سبق».
+    private static func baseChoices(for example: Example) -> ChoiceQuestion? {
         // 1) الخيارات ثابتة في نص السؤال («أيّ مما يلي»).
         if let fixed = example.fixedOptions {
             let options = Array(uniqued(fixed).prefix(4))
